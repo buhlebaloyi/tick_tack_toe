@@ -1,5 +1,5 @@
 class TickTackToe
-    include PlayerMove
+    #include PlayerMove
     attr_reader :player_pick
     attr_reader :player_no
     def initialize(player_no, player_pick)
@@ -35,7 +35,7 @@ class PlayerChoices < TickTackToe
 end
 
 class Screen < PlayerChoices
-    def disp_screen
+    def disp_screen()
         p "| #{   top_left} |" + " #{   top_center} |" + " #{   top_right} |"
         p "| #{middle_left} |" + " #{middle_center} |" + " #{middle_right} |"
         p "| #{bottom_left} |" + " #{bottom_center} |" + " #{bottom_right} |"
@@ -88,10 +88,70 @@ class PlayerMove < PlayerChoices
 
         end
 
+        return old_game
+
     end
 
 end
 
+class GamePlay < Screen
+    def self.playgame()
+        until (old_game.length > 9) or (match_three() == true) do
+            puts "Enter player number: "
+            player_no = gets.chomp
+            puts "Enter position to play: "
+            player_coice = gets.chomp
+            #Starting new instance of game play
+            play_game = TickTackToe.new(player_no, player_coice)
+            disp_screen()
+
+        end
+
+    end
+
+    def match_three()
+        if (old_game[0] == old_game[3]) && (old_game[0] == old_game[6])
+            return true
+
+        elsif (old_game[1] == old_game[4]) && (old_game[1] == old_game[7])
+            return true
+
+        elsif (old_game[2] == old_game[5]) && (old_game[2] == old_game[8])
+            return true
+
+        elsif (old_game[0] == old_game[1]) && (old_game[0] == old_game[2])
+            return true
+
+        elsif (old_game[3] == old_game[4]) && (old_game[3] == old_game[5])
+            return true
+
+        elsif (old_game[6] == old_game[7]) && (old_game[6] == old_game[8])
+            return true
+
+        elsif (old_game[0] == old_game[4]) && (old_game[0] == old_game[8])
+            return true
+
+        elsif (old_game[2] == old_game[4]) && (old_game[2] == old_game[6])
+            return true
+
+        end
+
+    end
+
+    def self.pausegame()
+        return old_game
+
+    end
+
+    def self.terminategame()
+        if (player_coice == stop) or 
+            puts "Game Over player #{} won the game"
+
+        end
+
+    end
+
+end
 
 #super is useful for instance variables
-new_game = TickTackToe.new(1,1)
+#new_game = TickTackToe.new(1,1)
