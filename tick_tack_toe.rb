@@ -208,3 +208,119 @@ end
 #new_game = TickTackToe.new(1,1)
 
 play_game_ = GamePlay.playgame
+
+###new code
+class PlayerInfo
+    attr_writer :player_number
+    def initialize(player_number)
+        @player_number = player_number
+    end
+    def switch_player()
+        @player_number = !@player_number
+    end
+    def player_symbol(player_number)
+        if player_number == 1
+            return symbol = "X"
+        elsif player_number == 2
+            return symbol = "O"
+        else
+            "Player number should be between 1 and 2"
+            return
+        end
+    end
+end
+
+class GameStates
+    attr_writer :move_array
+    def initialize(move_array)
+        @move_array = move_array
+    end
+    def moves_available()
+        if @move_array.length < 9
+            moves_avail = true
+        elsif (@move_array.include? nil) == true
+            moves_avail = true
+        elsif (@move_array.include? nil) == false
+            moves_avail = false
+        end
+        return moves_avail
+    end
+    def match_3_hor()
+        count = 0
+        match = false
+        until count >= 8 do
+            if @move_array[count] == @move_array[count+1] and @move_array[count] == @move_array[count + 2]
+                match = true
+                count = 8
+            else
+                count += 3
+            end
+        end
+        return match, @move_array[count]
+    end
+    def match_3_vert()
+        count = 0
+        match = false
+        until count >= 8 do
+            if @move_array[count] == @move_array[count+3] and @move_array[count] == @move_array[count + 6]
+                match = true
+                count = 8
+            else
+                count += 3
+            end
+        end
+        return match, @move_array[count]
+    end
+    def match_3_diag()
+        count = 0
+        match = false
+        if @move_array[count] == @move_array[count+4] and @move_array[count] == @move_array[count+8]
+            match = true
+        elsif @move_array[count+2] == @move_array[count+4] and @move_array[count+2] == @move_array[count+6]
+            match = true
+        end
+        return match, @move_array[count]
+    end
+end
+
+class GameStatus
+    def draw()
+        move_array = [1, 2, 4, 8, 5, 6, 7, 8 ,9]
+        game_draw = false
+        match_3 = false
+        gamestates = GameStates.new(move_array)
+        moves_available = gamestates.moves_available()
+        match_3_diag = gamestates.match_3_diag()
+        match_3_hor = gamestates.match_3_hor()
+        match_3_vert = gamestates.match_3_vert()
+        if match_3_diag[0] == true or match_3_hor[0] == true or match_3_vert[0] == true
+            match_3 = true
+        end
+        if moves_available == false and match_3 == false
+            game_draw = true
+            puts "Game over. The game ends in a draw."
+        end
+        return game_draw
+    end
+    def player_win()
+        move_array = ["O", "O", "O", "O", "O", "O", "O", "O" ,"O"]
+        match_3 = false
+        gamestates = GameStates.new(move_array)
+        match_3_diag_ = gamestates.match_3_diag()
+        match_3_hor_ = gamestates.match_3_hor()
+        match_3_vert_ = gamestates.match_3_vert()
+        if match_3_diag_[0] == true
+            win_player_symbol = match_3_diag_[1]
+        elsif match_3_hor_[0] == true
+            win_player_symbol = match_3_hor_[1]
+        elsif match_3_vert_[0] == true
+            win_player_symbol = match_3_vert_[1]
+        end
+        if win_player_symbol == "O"
+            winner = "Player 2"
+        elsif win_player_symbol == "X"
+            winner = "Player 1"
+        end
+        return winner
+    end
+end
